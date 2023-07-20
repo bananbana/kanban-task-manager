@@ -1,9 +1,16 @@
 package com.example.kanbantaskmanager.Column;
 
+import java.util.List;
+
+import com.example.kanbantaskmanager.Board.Board;
+import com.example.kanbantaskmanager.Task.Task;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -16,6 +23,13 @@ public class Column {
     private Long id;
     private String name;
 
+@ManyToOne
+@JoinColumn(name="board_id")
+private Board board;
+
+@OneToMany
+@JoinColumn(name="task_id")
+private List<Task> tasks;
 
     public Column (String name) {
         this.name = name;
@@ -42,5 +56,13 @@ public class Column {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(List<Task> tasks) {
+        this.tasks = tasks;
     }
 }

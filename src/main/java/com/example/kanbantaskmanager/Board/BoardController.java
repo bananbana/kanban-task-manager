@@ -1,5 +1,7 @@
 package com.example.kanbantaskmanager.Board;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,24 +18,26 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
+    @GetMapping("/boards")
+    public List<Board> getAll() {
+        return this.boardService.findAll();
+    }
+
     @GetMapping("/boards/{id}")
     public Board getOne(@PathVariable("id") Long id) {
         return boardService.getBoardById(id);
     }
 
-    //post customer details to database
     @PostMapping("/boards")
     public Board create(@RequestBody Board board) {
         return this.boardService.createBoard(board);
     }
 
-    //delete specific customer
     @DeleteMapping("/boards/{id}")
     public void removeBoard(@PathVariable("id") Long id) {
         boardService.deleteBoard(id);
     }
 
-    //update customer details in database
     @PutMapping("/boards/{id}")
     public Board update(@RequestBody Board board, @PathVariable Long id) {
         boardService.updateBoard(board, id);

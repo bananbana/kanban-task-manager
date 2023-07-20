@@ -1,5 +1,7 @@
 package com.example.kanbantaskmanager.Subtask;
 
-public class SubtaskRepository {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SubtaskRepository extends JpaRepository <Subtask, Long> {
     
 }

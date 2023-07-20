@@ -1,9 +1,13 @@
 package com.example.kanbantaskmanager.Subtask;
 
+import com.example.kanbantaskmanager.Task.Task;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,6 +18,10 @@ public class Subtask {
     private Long id;
     private String title;
     private Boolean isCompleated;
+
+    @ManyToOne
+    @JoinColumn(name="task_id")
+    private Task task;
 
     public Subtask(String title, Boolean isCompleated) {
         this.title = title;

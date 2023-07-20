@@ -1,5 +1,7 @@
 package com.example.kanbantaskmanager.Board;
 
+import java.util.List;
+
 import com.example.kanbantaskmanager.Column.Column;
 
 import jakarta.persistence.Entity;
@@ -7,7 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 
@@ -20,9 +22,9 @@ public class Board {
 private Long id;
 private String name;
 
-@ManyToOne
+@OneToMany
 @JoinColumn(name="column_id")
-private Column column;
+private List<Column> columns;
 
 public Board(String name) {
     this.name = name;
@@ -50,12 +52,12 @@ public String toString() {
         this.name = name;
     }
 
-    public Column getColumn() {
-        return column;
+    public List<Column> getColumns() {
+        return columns;
     }
 
-    public void setColumn(Column column) {
-        this.column = column;
+    public void setColumn(List<Column> columns) {
+        this.columns = columns;
     }
     
 }
