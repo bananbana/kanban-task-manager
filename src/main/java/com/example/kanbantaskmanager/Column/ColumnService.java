@@ -1,6 +1,8 @@
 package com.example.kanbantaskmanager.Column;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,10 @@ public class ColumnService {
 
     public List<Column> findAll() {
         return this.columnRepository.findAll();
+    }
+
+    public Set<Column> findAllById(Set<Long> ids) {
+        return new HashSet<Column>(this.columnRepository.findAllById(ids));
     }
 
     public Column getColumnById(Long id) {

@@ -1,6 +1,6 @@
 package com.example.kanbantaskmanager.Board;
 
-import java.util.List;
+import java.util.Set;
 
 import com.example.kanbantaskmanager.Column.Column;
 
@@ -24,7 +24,7 @@ private String name;
 
 @OneToMany
 @JoinColumn(name="column_id")
-private List<Column> columns;
+private Set<Column> columns;
 
 public Board(String name) {
     this.name = name;
@@ -52,11 +52,11 @@ public String toString() {
         this.name = name;
     }
 
-    public List<Column> getColumns() {
+    public Set<Column> getColumns() {
         return columns;
     }
 
-    public void setColumn(List<Column> columns) {
+    public void setColumns(Set<Column> columns) {
         this.columns = columns;
     }
     
