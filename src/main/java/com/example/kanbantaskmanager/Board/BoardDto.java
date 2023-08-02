@@ -1,13 +1,17 @@
 package com.example.kanbantaskmanager.Board;
 
+public package com.example.kanbantaskmanager.Board;
 
-public class CreateBoardDto {
+import java.util.Set;
+
+
+public class BoardDto {
     private Long id;
     private String name;
 
-    protected CreateBoardDto() {}
+    protected BoardDto() {}
 
-    public CreateBoardDto(String name) {
+    public BoardDto(String name) {
         this.name = name;
     }
 
@@ -30,6 +34,6 @@ public String toString() {
     public void setName(String name) {
         this.name = name;
     }
+  
     
-
 }

@@ -1,24 +1,31 @@
 package com.example.kanbantaskmanager.Board;
 
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.example.kanbantaskmanager.Column.Column;
-import com.example.kanbantaskmanager.Column.ColumnService;
 
 @Service
 public class BoardMapper {
-    @Autowired
-    private ColumnService columnService;
+
+    public CreateBoardDto convertToDto(Board board) {
+        CreateBoardDto newBoard = new CreateBoardDto();
+        newBoard.setId(board.getId());
+        newBoard.setName(board.getName());
+
+        return newBoard;
+    }
+    
+public Board convertToEntity(BoardDto boardDto) {
+        Board newBoard = new Board();
+
+        newBoard.setName(boardDto.getName());
+        newBoard.setId(boardDto.getId());
+
+        return newBoard;
+    }
 
     public Board convertToEntity(CreateBoardDto boardDto) {
         Board newBoard = new Board();
-        Set<Column> columns = columnService.findAllById(boardDto.getColumnIds());
 
         newBoard.setName(boardDto.getName());
-        newBoard.setColumns(columns);
 
         return newBoard;
     }

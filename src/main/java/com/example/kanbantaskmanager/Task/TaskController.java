@@ -30,8 +30,8 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-        public Task create(@RequestBody Task task) {
-            return this.taskService.createTask(task);
+        public CreateTaskDto create(@RequestBody CreateTaskDto taskDto) {
+            return this.taskService.createTask(taskDto);
         }
      
     @DeleteMapping("/tasks/{id}")
@@ -40,7 +40,7 @@ public class TaskController {
         }
 
     @PutMapping("/tasks/{id}")
-    public Task uptade(@RequestBody Task task, @PathVariable Long id) {
+    public Task update(@RequestBody Task task, @PathVariable Long id) {
         taskService.updateTaks(task, id);
         return task;
     }

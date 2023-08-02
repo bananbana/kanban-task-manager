@@ -29,8 +29,8 @@ public class BoardController {
     }
 
     @PostMapping("/boards")
-    public Board create(@RequestBody Board board) {
-        return this.boardService.createBoard(board);
+    public CreateBoardDto create(@RequestBody CreateBoardDto boardDto) {
+        return this.boardService.createBoard(boardDto);
     }
 
     @DeleteMapping("/boards/{id}")

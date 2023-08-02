@@ -1,8 +1,9 @@
 package com.example.kanbantaskmanager.Task;
 
-import java.util.List;
+import java.util.Set;
 
-import com.example.kanbantaskmanager.Column.Column;
+import com.example.kanbantaskmanager.Board.Board;
+import com.example.kanbantaskmanager.Status.Status;
 import com.example.kanbantaskmanager.Subtask.Subtask;
 
 import jakarta.persistence.Entity;
@@ -23,25 +24,29 @@ public class Task {
     private Long id;
     private String title;
     private String description;
-    private String status;
 
     @ManyToOne
-    @JoinColumn(name="column_id")
-    private Column column;
+    @JoinColumn(name="board_id")
+    private Board board;
 
-    @OneToMany
-    @JoinColumn(name="subtask_id")
-    private List<Subtask> subtasks;
+    @ManyToOne
+    @JoinColumn(name="status_id")
+    private Status status;
+
+    @OneToMany(mappedBy = "task")
+    private Set<Subtask> subtasks;
 
     public Task(String title, String description, String status) {
         this.title = title;
         this.description = description;
-        this.status = status;
+    }
+
+    protected Task() {
     }
 
     @Override
     public String toString() {
-        return String.format("Task[id=%d, title='%s', description='%s', status='%s']", id, title, description, status);
+        return String.format("Task[id=%d, title='%s', description='%s']", id, title, description);
     }
 
     public Long getId() {
@@ -60,7 +65,7 @@ public class Task {
         this.title = title;
     }
 
-    public String getDecsription() {
+    public String getDescription() {
         return description;
     }
 
@@ -68,19 +73,27 @@ public class Task {
         this.description = description;
     }
 
-    public String getStatus() {
-        return status;
+    public Board getBoard() {
+        return board;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
-    public List<Subtask> getSubtasks() {
+    public Set<Subtask> getSubtasks() {
         return subtasks;
     }
 
-    public void setSubtasks(List<Subtask> subtasks) {
+    public void setSubtasks(Set<Subtask> subtasks) {
         this.subtasks = subtasks;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

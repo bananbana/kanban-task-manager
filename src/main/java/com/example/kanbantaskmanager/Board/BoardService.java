@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
+    @Autowired BoardMapper boardMapper;
     
     public List<Board> findAll() {
         return this.boardRepository.findAll();
@@ -18,8 +19,11 @@ public class BoardService {
         return boardRepository.findById(id).get();
     }
 
-    public Board createBoard(Board board) {
-        return this.boardRepository.save(board);
+    public CreateBoardDto createBoard(CreateBoardDto boardDto) {
+Board newBoard = boardMapper.convertToEntity(boardDto);
+Board savedBoard = this.boardRepository.save(newBoard);
+
+        return boardMapper.convertToDto((savedBoard));
         }
     
     public void deleteBoard(Long id) {

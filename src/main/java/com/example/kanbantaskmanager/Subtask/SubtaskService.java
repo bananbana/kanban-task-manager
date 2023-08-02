@@ -1,6 +1,8 @@
 package com.example.kanbantaskmanager.Subtask;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +15,10 @@ public class SubtaskService {
 
     public List<Subtask> findAll() {
         return this.subtaskRepository.findAll();
+    }
+
+    public Set<Subtask> findAllById(Set<Long> ids) {
+        return new HashSet<Subtask>(this.subtaskRepository.findAllById(ids));
     }
 
     public Subtask getSubtaskById(Long id) {

@@ -1,6 +1,6 @@
-package com.example.kanbantaskmanager.Column;
+package com.example.kanbantaskmanager.Status;
 
-import java.util.List;
+import java.util.Set;
 
 import com.example.kanbantaskmanager.Board.Board;
 import com.example.kanbantaskmanager.Task.Task;
@@ -15,8 +15,8 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="COLUMN")
-public class Column {
+@Table(name="STATUS")
+public class Status {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -27,19 +27,18 @@ public class Column {
 @JoinColumn(name="board_id")
 private Board board;
 
-@OneToMany
-@JoinColumn(name="task_id")
-private List<Task> tasks;
+@OneToMany(mappedBy = "status")
+private Set<Task> tasks;
 
-    public Column (String name) {
+    public Status (String name) {
         this.name = name;
     }
 
-    protected Column () {}
+    protected Status () {}
 
     @Override
     public String toString() {
-        return String.format("Column[name='%s']", name);
+        return String.format("Status[name='%s']", name);
     }
 
     public Long getId() {
@@ -58,11 +57,11 @@ private List<Task> tasks;
         this.name = name;
     }
 
-    public List<Task> getTasks() {
+    public Set<Task> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
+    public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
     }
 }
