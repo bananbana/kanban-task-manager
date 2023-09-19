@@ -20,7 +20,7 @@ public class StatusController {
     private StatusService statusService;
 
     @GetMapping("/status_codes")
-    public List<Status> getAll() {
+    public List<CreateStatusDto> getAll() {
         return this.statusService.findAll();
     }
 
@@ -30,8 +30,8 @@ public class StatusController {
     }
 
     @PostMapping("/status_codes")
-    public Status create(@RequestBody Status status) {
-        return this.statusService.createStatus(status);
+    public CreateStatusDto create(@RequestBody CreateStatusDto statusDto) {
+        return this.statusService.createStatus(statusDto);
     }
 
     @DeleteMapping("/status_codes/{id}")
@@ -40,8 +40,8 @@ public class StatusController {
     }
 
     @PutMapping("/status_codes/{id}")
-    public Status uptade(@RequestBody Status status, @PathVariable Long id) {
-        statusService.uptadeStatus(status, id);
+    public Status update(@RequestBody Status status, @PathVariable Long id) {
+        statusService.updateStatus(status, id);
         return status;
     }
 }

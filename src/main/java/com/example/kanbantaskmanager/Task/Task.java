@@ -1,5 +1,6 @@
 package com.example.kanbantaskmanager.Task;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.example.kanbantaskmanager.Board.Board;
@@ -22,6 +23,7 @@ public class Task {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
+
     private String title;
     private String description;
 
@@ -34,9 +36,9 @@ public class Task {
     private Status status;
 
     @OneToMany(mappedBy = "task")
-    private Set<Subtask> subtasks;
+    private Set<Subtask> subtasks = new HashSet<>();
 
-    public Task(String title, String description, String status) {
+    public Task(String title, String description) {
         this.title = title;
         this.description = description;
     }
@@ -53,7 +55,7 @@ public class Task {
         return id;
     }
     
-    public void SetId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

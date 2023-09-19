@@ -16,30 +16,31 @@ public class Subtask {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
+    
     private String title;
-    private Boolean isCompleated;
+    private Boolean isCompleted;
 
     @ManyToOne
     @JoinColumn(name="task_id")
     private Task task;
 
-    public Subtask(String title, Boolean isCompleated) {
+    public Subtask(String title, Boolean isCompleted) {
         this.title = title;
-        this.isCompleated = isCompleated;
+        this.isCompleted = isCompleted;
     }
 
     protected Subtask () {}
 
     @Override
     public  String toString() {
-        return String.format("Subtask[id=%d, title='%s', isCompleated=%b]", id, title, isCompleated);
+        return String.format("Subtask[id=%d, title='%s', isCompleted=%b]", id, title, isCompleted);
     }
 
     public Long getId() {
         return id;
     }
     
-    public void SetId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     
@@ -51,12 +52,20 @@ public class Subtask {
         this.title = title;
     }
 
-    public Boolean getIsCompleated() {
-        return isCompleated;
+    public Boolean getIsCompleted() {
+        return isCompleted;
     }
 
-    public void setIsCompleated(Boolean isCompleated) {
-        this.isCompleated = isCompleated;
+    public void setIsCompleted(Boolean isCompleted) {
+        this.isCompleted = isCompleted;
+    }
+
+    public Task getTask () {
+        return task;
+    }
+
+    public void setTask (Task task) {
+        this.task = task;
     }
     
 }

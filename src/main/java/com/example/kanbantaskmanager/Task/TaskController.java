@@ -10,38 +10,49 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.kanbantaskmanager.Subtask.CreateSubtaskDto;
+import com.example.kanbantaskmanager.Subtask.Subtask;
+import com.example.kanbantaskmanager.Subtask.SubtaskMapper;
+import com.example.kanbantaskmanager.Subtask.SubtaskService;
+
 @RestController
+@RequestMapping("tasks")
 @CrossOrigin(origins = "http://localhost:5173")
 public class TaskController {
-    
+
     @Autowired
-    private TaskService taskService;
+    private SubtaskService subtaskService;
+    @Autowired
+    private SubtaskMapper subtaskMapper;
 
-    @GetMapping("/tasks")
-    public List<Task> getAll() {
-        return this.taskService.findAll();
+    @GetMapping ("/{taskId}/subtasks/{subtaskId}")
+    public CreateSubtaskDto getOneSubtask(@PathVariable Long taskId, @PathVariable Long subtaskId) {
+        Subtask searchedSubtask = subtaskService.getSubtaskById(subtaskId);
+        return subtaskMapper.convertToDto(searchedSubtask);
     }
 
-    @GetMapping("/tasks/{id}")
-    public Task getOne(@PathVariable("id") Long id) {
-        return taskService.getTaskById(id);
+    @GetMapping("/{taskId}/subtasks")
+    public List<CreateSubtaskDto> getSubtasksByTask(@PathVariable Long taskId) {
+        List<CreateSubtaskDto> subtasksByTask = subtaskService.getSubtasksByTaskId(taskId);
+        return subtasksByTask;
     }
 
-    @PostMapping("/tasks")
-        public CreateTaskDto create(@RequestBody CreateTaskDto taskDto) {
-            return this.taskService.createTask(taskDto);
-        }
-     
-    @DeleteMapping("/tasks/{id}")
-        public void removeTask(@PathVariable("id") Long id) {
-            taskService.deleteTask(id);
-        }
+    @PostMapping("/{taskId}/subtasks")
+        public CreateSubtaskDto addSubtaskToTask(@PathVariable Long taskId, @RequestBody CreateSubtaskDto subtaskDto) {
+           return this.subtaskService.createSubtask((subtaskDto));
+    }
 
-    @PutMapping("/tasks/{id}")
-    public Task update(@RequestBody Task task, @PathVariable Long id) {
-        taskService.updateTaks(task, id);
-        return task;
+    @DeleteMapping("/{taskId}/subtasks/{subtaskId}")
+    public void removeSubtaskFromTask(@PathVariable Long taskId, @PathVariable Long subtaskId) {
+        subtaskService.deleteSubtask(subtaskId);
+    }
+
+    @PutMapping("/{taskId}/subtasks/{subtaskId}")
+    public CreateSubtaskDto updateSubtask(@PathVariable Long taskId, @RequestBody CreateSubtaskDto subtaskDto, @PathVariable Long subtaskId) {
+        subtaskService.updateSubtask(taskId, subtaskDto, subtaskId);
+        return subtaskDto;
     }
 }

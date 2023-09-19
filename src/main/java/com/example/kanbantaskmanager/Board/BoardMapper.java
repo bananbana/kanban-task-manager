@@ -4,27 +4,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class BoardMapper {
-
-    public CreateBoardDto convertToDto(Board board) {
-        CreateBoardDto newBoard = new CreateBoardDto();
+    public BoardDto convertToDto(Board board) {
+        BoardDto newBoard = new BoardDto();
         newBoard.setId(board.getId());
         newBoard.setName(board.getName());
 
         return newBoard;
     }
-    
-public Board convertToEntity(BoardDto boardDto) {
-        Board newBoard = new Board();
 
-        newBoard.setName(boardDto.getName());
+    public Board convertToEntity(BoardDto boardDto) {
+        Board newBoard = new Board();
         newBoard.setId(boardDto.getId());
-
-        return newBoard;
-    }
-
-    public Board convertToEntity(CreateBoardDto boardDto) {
-        Board newBoard = new Board();
-
         newBoard.setName(boardDto.getName());
 
         return newBoard;

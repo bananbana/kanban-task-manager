@@ -45,7 +45,7 @@ private Set<Task> tasks;
         return id;
     }
     
-    public void SetId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -63,5 +63,13 @@ private Set<Task> tasks;
 
     public void setTasks(Set<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 }

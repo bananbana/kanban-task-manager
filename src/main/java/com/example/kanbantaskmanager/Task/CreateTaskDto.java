@@ -1,6 +1,6 @@
 package com.example.kanbantaskmanager.Task;
 
-import java.util.Set;
+import java.util.List;
 
 
 public class CreateTaskDto {
@@ -8,19 +8,20 @@ public class CreateTaskDto {
     private String title;
     private String description;
     private Long statusId;
-    private Set<Long> subtasks;
+    private List<Long> subtasks;
     private Long boardId;
 
     protected CreateTaskDto() {}
 
-    public CreateTaskDto(String title, String description) {
+    public CreateTaskDto(String title, String description, Long id) {
+        this.id = id;
         this.title = title;
         this.description = description;
     }
 
     @Override
     public String toString() {
-        return String.format("Task[id=%d, title='%s', descritpion='%s']", id, title, description);
+        return String.format("Task[id=%d, title='%s', description='%s']", id, title, description);
     }
 
     public Long getId() {
@@ -55,19 +56,19 @@ public class CreateTaskDto {
         this.statusId = statusId;
     }
 
-    public Set<Long> getSubtasks() {
+    public List<Long> getSubtasks() {
         return this.subtasks;
     }
 
-    public void setSubtasks(Set<Long> subtasks) {
+    public void setSubtasks(List<Long> subtasks) {
         this.subtasks = subtasks;
     }
 
-    public Long getBoard() {
+    public Long getBoardId() {
         return this.boardId;
     }
 
-    public void setBoard(Long boardId) {
+    public void setBoardId(Long boardId) {
         this.boardId = boardId;
     }
 }
