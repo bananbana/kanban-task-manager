@@ -1,4 +1,4 @@
-package security.services;
+package com.example.kanbantaskmanager.security.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

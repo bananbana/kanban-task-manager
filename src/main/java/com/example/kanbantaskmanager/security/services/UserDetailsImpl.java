@@ -1,4 +1,4 @@
-package security.services;
+package com.example.kanbantaskmanager.security.services;
 
 import java.util.Collection;
 import java.util.List;

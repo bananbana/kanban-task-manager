@@ -91,11 +91,12 @@ public class TaskService {
         taskRepository.deleteById(id);
     }
 
-    public TaskDto updateTask(Long boardId, TaskDto taskDto, Long id) {
-        Task taskToUpdate = this.getTaskById(id);
+    public TaskDto updateTask(Long boardId, TaskDto taskDto, Long taskId) {
+        Task taskToUpdate = this.getTaskById(taskId);
         if (taskToUpdate == null) {
-            throw new EntityNotFoundException("Task with id " + id + " does not exist");
+            throw new EntityNotFoundException("Task with id " + taskId + " does not exist");
         }
+        taskToUpdate.setId(taskId);
         taskToUpdate.setTitle(taskDto.getTitle());
         taskToUpdate.setDescription(taskDto.getDescription());
 
@@ -104,6 +105,19 @@ public class TaskService {
 
         Board board = boardService.getBoardById(boardId);
         taskToUpdate.setBoard(board);
+        taskRepository.save(taskToUpdate);
+        return taskMapper.convertToDto(taskToUpdate);
+    }
+
+    public TaskDto updateStatusOnDrag(Long boardId, Long taskId, Long statusId) {
+        Task taskToUpdate = this.getTaskById(taskId);
+        Board board = boardService.getBoardById(boardId);
+        Status newStatus = statusService.getStatusById(statusId);
+        taskToUpdate.setId(taskId);
+        taskToUpdate.setBoard(board);
+        taskToUpdate.setDescription(taskToUpdate.getDescription());
+        taskToUpdate.setStatus(newStatus);
+        taskToUpdate.setTitle(taskToUpdate.getTitle());
         taskRepository.save(taskToUpdate);
         return taskMapper.convertToDto(taskToUpdate);
     }

@@ -31,9 +31,17 @@ public class User {
     @Size(max = 120)
     private String password;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Board> ownedBoards;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    @ManyToMany(cascade = CascadeType.REMOVE)
+    @JoinTable(name = "user_boards", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+            @JoinColumn(name = "board_id") })
+    private Set<Board> boards = new HashSet<>();
 
     public User() {
     }
@@ -82,5 +90,21 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Set<Board> getBoards() {
+        return boards;
+    }
+
+    public void setBoards(Set<Board> boards) {
+        this.boards = boards;
+    }
+
+    public Set<Board> getOwnedBoards() {
+        return ownedBoards;
+    }
+
+    public void setOwnedBoards(Set<Board> ownedBoards) {
+        this.ownedBoards = ownedBoards;
     }
 }

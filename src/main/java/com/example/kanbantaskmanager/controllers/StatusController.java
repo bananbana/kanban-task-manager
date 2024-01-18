@@ -17,7 +17,7 @@ public class StatusController {
     private StatusService statusService;
 
     @GetMapping("/status_codes/{id}")
-    public Status getOne(@PathVariable("id") Long id) {
+    public Status getOne(@PathVariable Long id) {
         return statusService.getStatusById(id);
     }
 }

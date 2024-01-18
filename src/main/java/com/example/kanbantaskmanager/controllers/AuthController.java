@@ -6,8 +6,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.validation.Valid;
-import security.jwt.JwtUtils;
-import security.services.UserDetailsImpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,6 +29,8 @@ import com.example.kanbantaskmanager.payload.response.JwtResponse;
 import com.example.kanbantaskmanager.payload.response.MessageResponse;
 import com.example.kanbantaskmanager.repositories.RoleRepository;
 import com.example.kanbantaskmanager.repositories.UserRepository;
+import com.example.kanbantaskmanager.security.jwt.JwtUtils;
+import com.example.kanbantaskmanager.security.services.UserDetailsImpl;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

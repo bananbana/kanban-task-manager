@@ -1,5 +1,6 @@
-package security.jwt;
+package com.example.kanbantaskmanager.security.jwt;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 import javax.crypto.SecretKey;
@@ -10,17 +11,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import com.example.kanbantaskmanager.security.services.UserDetailsImpl;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import security.services.UserDetailsImpl;
+import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtils {
     private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
 
-    @Value("${kanbanTasManager.app.jwtSecret}")
+    @Value("${kanbanTaskManager.app.jwtSecret}")
     private String jwtSecret;
 
     @Value("${kanbanTaskManager.app.jwtExpirationMs}")
@@ -39,7 +42,7 @@ public class JwtUtils {
     }
 
     private SecretKey key() {
-        return Jwts.SIG.HS256.key().build();
+        return Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8)); // return Jwts.SIG.HS256.key().build();
     }
 
     public String getUserNameFromJwtToken(String token) {
@@ -59,6 +62,8 @@ public class JwtUtils {
             logger.error("JWT token is unsupported: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
+        } catch (Exception e) {
+            logger.error("Unexpected error during JWT token validation: {}", e.getMessage());
         }
 
         return false;

@@ -17,7 +17,7 @@ public class CreateSubtaskDto {
 
     @Override
     public String toString() {
-        return String.format("Subtask[id=%d, title='%s', isCompleted=%b]", id, title, isCompleted);
+        return "Subtask[id=%d, title='%s', isCompleted=%b]".formatted(id, title, isCompleted);
     }
 
     public Long getId() {
