@@ -53,18 +53,19 @@ public class UserService {
     public void deleteById(Long userId) {
         User userToDelete = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User with id: " + userId + " not found"));
-        List<Long> boardIds = userToDelete.getBoards().stream().map(Board::getId).collect(Collectors.toList());
-        Set<Board> boardsWithAccessTo = boardRepository.findAllById(boardIds).stream().collect(Collectors.toSet());
-        Set<Board> usersBoards = userToDelete.getBoards();
-        boardsWithAccessTo.removeAll(usersBoards);
-
-        for (Board board : boardsWithAccessTo) {
-            Set<User> users = board.getUsers();
-            users.remove(userToDelete);
-            boardRepository.save(board);
+        Set<Board> userBoards = userToDelete.getBoards();
+        for (Board board : userBoards) {
+            if (board.getOwner().getId().equals(userId)) {
+                boardRepository.deleteById(board.getId());
+            } else {
+                board.getUsers().remove(userToDelete);
+                boardRepository.save(board);
+            }
         }
-        userRepository.deleteById(userId);
 
+        userToDelete.getBoards().clear();
+        userRepository.save(userToDelete);
+        userRepository.delete(userToDelete);
     }
 
     public UserDto addUserRoles(Long userId, Long roleId) {
@@ -153,17 +154,17 @@ public class UserService {
         if (!passwordEncoder.matches(userDto.getPassword(), userToDelete.getPassword())) {
             throw new IllegalArgumentException("The provided password is incorrect.");
         }
-        List<Long> boardIds = userToDelete.getBoards().stream().map(Board::getId).collect(Collectors.toList());
-        Set<Board> boardsWithAccessTo = boardRepository.findAllById(boardIds).stream().collect(Collectors.toSet());
-        Set<Board> usersBoards = userToDelete.getBoards();
-        boardsWithAccessTo.removeAll(usersBoards);
-
-        for (Board board : boardsWithAccessTo) {
-            Set<User> users = board.getUsers();
-            users.remove(userToDelete);
-            boardRepository.save(board);
+        Set<Board> userBoards = userToDelete.getBoards();
+        for (Board board : userBoards) {
+            if (board.getOwner().getId().equals(userId)) {
+                boardRepository.deleteById(board.getId());
+            } else {
+                board.getUsers().remove(userToDelete);
+                boardRepository.save(board);
+            }
         }
-
+        userToDelete.getBoards().clear();
+        userRepository.save(userToDelete);
         userRepository.delete(userToDelete);
     }
 }
