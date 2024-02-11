@@ -16,7 +16,7 @@ public class CreateStatusDto {
 
     @Override
     public String toString() {
-        return String.format("Status[name='%s', color='%s']", name, color);
+        return "Status[name='%s', color='%s']".formatted(name, color);
     }
 
     public Long getId() {

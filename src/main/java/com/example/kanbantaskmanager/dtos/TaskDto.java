@@ -22,7 +22,7 @@ public class TaskDto {
 
     @Override
     public String toString() {
-        return String.format("Task[id=%d, title='%s', description='%s']", id, title, description);
+        return "Task[id=%d, title='%s', description='%s']".formatted(id, title, description);
     }
 
     public Long getId() {

@@ -1,30 +1,22 @@
 package com.example.kanbantaskmanager.controllers;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.example.kanbantaskmanager.dtos.BoardDto;
-import com.example.kanbantaskmanager.dtos.ColorUpdateDto;
-import com.example.kanbantaskmanager.dtos.CreateBoardDto;
-import com.example.kanbantaskmanager.dtos.CreateStatusDto;
-import com.example.kanbantaskmanager.dtos.CreateTaskDto;
+import com.example.kanbantaskmanager.dtos.ShareBoardDto;
 import com.example.kanbantaskmanager.dtos.TaskDto;
-import com.example.kanbantaskmanager.mappers.BoardMapper;
-import com.example.kanbantaskmanager.mappers.TaskMapper;
-import com.example.kanbantaskmanager.models.Board;
-import com.example.kanbantaskmanager.models.Task;
 import com.example.kanbantaskmanager.services.BoardService;
-import com.example.kanbantaskmanager.services.StatusService;
 import com.example.kanbantaskmanager.services.TaskService;
 
 @RestController
@@ -35,101 +27,47 @@ public class BoardController {
     private BoardService boardService;
     @Autowired
     private TaskService taskService;
-    @Autowired
-    private StatusService statusService;
-    @Autowired
-    private TaskMapper taskMapper;
-    @Autowired
-    private BoardMapper boardMapper;
 
     @GetMapping
-    public List<BoardDto> getAllBoards() {
-        return this.boardService.findAll();
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<BoardDto>> getAllBoards() {
+        List<BoardDto> allBoards = this.boardService.findAll();
+        return ResponseEntity.ok(allBoards);
     }
 
-    @GetMapping("/{boardId}")
-    public BoardDto getOneBoard(@PathVariable Long boardId) {
-        Board searchedBoard = boardService.getBoardById(boardId);
-        return boardMapper.convertToDto(searchedBoard);
+    @PutMapping("/{boardId}/owner_assign")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<BoardDto> assignBoardOwnership(@RequestBody BoardDto boardDto, @RequestParam Long boardId) {
+        BoardDto boardToUpdate = boardService.assignOwner(boardId, boardDto.getOwnerId());
+        return ResponseEntity.ok(boardToUpdate);
     }
 
-    @PostMapping()
-    public BoardDto createBoard(@RequestBody CreateBoardDto boardDto) {
-        return this.boardService.createBoard(boardDto);
+    @GetMapping("/tasks")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<TaskDto>> getAllTasks() {
+        List<TaskDto> tasks = taskService.findAll();
+        return ResponseEntity.ok(tasks);
     }
 
-    @PutMapping("/{id}")
-    public BoardDto updateBoard(@RequestBody BoardDto boardDto, @PathVariable Long id) {
-        boardService.updateBoard(boardDto, id);
-        return boardDto;
+    @PutMapping("/assign/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> assignBoardToUser(@PathVariable Long userId,
+            @RequestBody ShareBoardDto boardDto) {
+        Long boardId = boardDto.getBoardId();
+        boardService.assignBoardAsAdmin(userId, boardId);
+
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public void removeBoard(@PathVariable("id") Long id) {
-        boardService.deleteBoard(id);
+    @DeleteMapping("/{boardId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public void deleteBoardAsAdmin(@PathVariable Long boardId) {
+        boardService.deleteBoard(boardId);
     }
 
-    // Status Codes
-    @GetMapping("/{boardId}/status_codes")
-    public List<CreateStatusDto> getAllByBoardId(@PathVariable Long boardId) {
-        return statusService.findAllByBoardId(boardId);
-    }
-
-    @PostMapping("/{boardId}/status_codes")
-    public CreateStatusDto create(@RequestBody CreateStatusDto statusDto, @PathVariable Long boardId) {
-        return this.statusService.createStatus(statusDto, boardId);
-    }
-
-    @PutMapping("/{boardId}/status_codes/{statusId}")
-    public CreateStatusDto update(@PathVariable Long boardId, @RequestBody CreateStatusDto statusDto,
-            @PathVariable Long statusId) {
-        statusService.updateStatus(boardId, statusDto, statusId);
-        return statusDto;
-    }
-
-    @PutMapping("/{boardId}/status_codes/{statusId}/color")
-    public CreateStatusDto updateStatusColor(
-            @PathVariable Long boardId,
-            @PathVariable Long statusId,
-            @RequestBody ColorUpdateDto colorUpdateDto) {
-        String newColor = colorUpdateDto.getNewColor();
-        return statusService.updateStatusColor(boardId, statusId, newColor);
-    }
-
-    @DeleteMapping("/{boardId}/status_codes/{statusId}")
-    public void deleteStatus(@PathVariable Long boardId, @PathVariable Long statusId) {
-        statusService.deleteStatus(statusId);
-    }
-
-    // Tasks
-
-    @GetMapping("/{boardId}/tasks")
-    public List<TaskDto> getTasksByBoard(@PathVariable Long boardId) {
-        List<TaskDto> tasksByBoard = taskService.getTaskByBoardId(boardId);
-        return tasksByBoard;
-    }
-
-    // add error handling when task with particular id exists, but not in provided
-    // board...
-    @GetMapping("/{boardId}/tasks/{taskId}")
-    public TaskDto getTaskFromBoard(@PathVariable Long boardId, @PathVariable Long taskId) {
-        Task searchedTask = taskService.getTaskById(taskId);
-        return taskMapper.convertToDto(searchedTask);
-    }
-
-    @PostMapping("/{boardId}/tasks")
-    public TaskDto createTask(@RequestBody CreateTaskDto taskDto, @PathVariable Long boardId) {
-        return this.taskService.createTask(taskDto, boardId);
-    }
-
-    @PutMapping("/{boardId}/tasks/{taskId}")
-    public TaskDto updateTask(@PathVariable Long boardId, @RequestBody TaskDto taskDto, @PathVariable Long taskId) {
-        taskService.updateTask(boardId, taskDto, taskId);
-        return taskDto;
-    }
-
-    @DeleteMapping("/{boardId}/tasks/{taskId}")
-    public void removeTaskFromBoard(@PathVariable Long boardId, @PathVariable Long taskId) {
-        taskService.deleteTask(taskId);
+    @PutMapping("/{boardId}/update_access")
+    @PreAuthorize("hasRole ('ADMIN')")
+    public BoardDto updateAccessToBoard(@RequestBody List<Long> userIds, @PathVariable Long boardId) {
+        return boardService.updateUserAccess(userIds, boardId);
     }
 }

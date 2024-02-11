@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class StatusService {
-    
+
     @Autowired
     private StatusRepository statusRepository;
     @Autowired
@@ -26,16 +27,18 @@ public class StatusService {
 
     public List<CreateStatusDto> findAll() {
         List<Status> statusCodesList = this.statusRepository.findAll();
-        List<CreateStatusDto> statusDtos = statusCodesList.stream().map((status) -> statusMapper.convertToDto(status)).toList();
+        List<CreateStatusDto> statusDtos = statusCodesList.stream().map((status) -> statusMapper.convertToDto(status))
+                .toList();
         return statusDtos;
     }
 
     public List<CreateStatusDto> findAllByBoardId(Long boardId) {
         List<Status> statusList = statusRepository.findAllByBoardId(boardId);
-        List<CreateStatusDto> statusDtos = statusList.stream().map((status) -> statusMapper.convertToDto(status)).toList();
+        List<CreateStatusDto> statusDtos = statusList.stream().map((status) -> statusMapper.convertToDto(status))
+                .toList();
         return statusDtos;
 
-    } 
+    }
 
     public Set<Status> findAllById(Set<Long> ids) {
         return new HashSet<Status>(this.statusRepository.findAllById(ids));
@@ -53,12 +56,15 @@ public class StatusService {
 
         if (statusDto.getColor() == null) {
             List<String> defaultStatusColors = Arrays.asList("#49c3e5", "#8471f2", "#67e2ae", "#f083f0", "#e66465");
-            int nextColorIndex = statusRepository.countByBoardId(boardId).intValue() % defaultStatusColors.size();
-            statusDto.setColor(defaultStatusColors.get(nextColorIndex));
-            
+            AtomicInteger nextColorIndex = new AtomicInteger(statusRepository.countByBoardId(boardId).intValue());
+            statusDto.setColor(defaultStatusColors.get(nextColorIndex.getAndIncrement() % defaultStatusColors.size()));
+
+            // int nextColorIndex = statusRepository.countByBoardId(boardId).intValue() %
+            // defaultStatusColors.size();
+            // statusDto.setColor(defaultStatusColors.get(nextColorIndex));
         }
+
         Status status = statusMapper.convertToEntity(statusDto);
-        status.setColor(statusDto.getColor());
         Status newStatus = statusRepository.save(status);
         CreateStatusDto newStatusDto = statusMapper.convertToDto(newStatus);
         return newStatusDto;
@@ -71,9 +77,9 @@ public class StatusService {
 
     public CreateStatusDto updateStatus(Long boardId, CreateStatusDto statusDto, Long statusId) {
         Status statusToUpdate = this.getStatusById(statusId);
-            if (statusToUpdate == null) {
-                throw new EntityNotFoundException("Status with id " + statusId + " does not exist.");
-            }
+        if (statusToUpdate == null) {
+            throw new EntityNotFoundException("Status with id " + statusId + " does not exist.");
+        }
 
         statusToUpdate.setName(statusDto.getName());
         statusRepository.save(statusToUpdate);

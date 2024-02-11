@@ -1,5 +1,6 @@
 package com.example.kanbantaskmanager.payload.request;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.validation.constraints.Email;
@@ -22,6 +23,8 @@ public class SignupRequest {
     @NotBlank
     @Size(min = 6, max = 40)
     private String password;
+
+    private List<Long> boardIds;
 
     public String getUsername() {
         return username;
@@ -53,5 +56,13 @@ public class SignupRequest {
 
     public void setRole(Set<String> role) {
         this.role = role;
+    }
+
+    public List<Long> getBoardIds() {
+        return this.boardIds;
+    }
+
+    public void setBoardIds(List<Long> boardIds) {
+        this.boardIds = boardIds;
     }
 }
