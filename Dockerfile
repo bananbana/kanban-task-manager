@@ -1,13 +1,12 @@
-FROM eclipse-temurin:17-jdk-jammy as builder
+# Build Stage
+FROM maven:3.8.4-openjdk-17-slim AS builder
 WORKDIR /opt/app
-COPY .mvn/ .mvn
-COPY mvnw pom.xml ./
-RUN ./mvnw dependency:go-offline
-COPY ./src ./src
-RUN ./mvnw clean install -DskipTests
+COPY . .
+RUN mvn clean install -DskipTests
 
+# Final Stage
 FROM eclipse-temurin:17-jre-jammy
 WORKDIR /opt/app
 EXPOSE 8080
-COPY --from=builder /opt/app/target/*.jar /opt/app/*.jar
-ENTRYPOINT ["java","-Dspring.profiles.active=prod", "-jar", "/opt/app/*.jar" ]
+COPY --from=builder /opt/app/target/*.jar /opt/app/
+ENTRYPOINT ["java", "-Dspring.profiles.active=prod", "-jar", "/opt/app/*.jar"]
