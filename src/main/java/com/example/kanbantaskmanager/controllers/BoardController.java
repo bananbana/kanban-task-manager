@@ -21,7 +21,6 @@ import com.example.kanbantaskmanager.services.TaskService;
 
 @RestController
 @RequestMapping("boards")
-@CrossOrigin(origins = "http://localhost:5173")
 public class BoardController {
     @Autowired
     private BoardService boardService;

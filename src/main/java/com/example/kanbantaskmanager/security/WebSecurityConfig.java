@@ -36,7 +36,6 @@ public class WebSecurityConfig {
     @Value("${kanbanTaskManager.app.allowedOrigin}")
     private String allowedOrigin;
 
-
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();

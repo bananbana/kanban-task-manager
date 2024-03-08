@@ -10,7 +10,6 @@ import com.example.kanbantaskmanager.models.Status;
 import com.example.kanbantaskmanager.services.StatusService;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:5173")
 public class StatusController {
 
     @Autowired

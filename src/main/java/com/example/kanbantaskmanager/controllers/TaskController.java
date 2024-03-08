@@ -21,7 +21,6 @@ import com.example.kanbantaskmanager.services.SubtaskService;
 
 @RestController
 @RequestMapping("user/tasks")
-@CrossOrigin(origins = "http://localhost:5173")
 public class TaskController {
 
     @Autowired
