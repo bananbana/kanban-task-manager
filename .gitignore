@@ -5,6 +5,7 @@ target/
 !**/src/test/**/target/
 kanban-task-manager-mikrus*
 mvnw
+Dockerfile
 
 ### STS ###
 .apt_generated
