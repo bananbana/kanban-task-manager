@@ -3,6 +3,8 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
+kanban-task-manager-mikrus*
+mvnw
 
 ### STS ###
 .apt_generated
